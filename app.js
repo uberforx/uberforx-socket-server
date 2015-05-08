@@ -24,19 +24,16 @@ io.on('connection', function(socket){
       users.push(user);
       console.log(user)
 
-      io.emit('users', users);
+      io.emit('users', user);
     });
 
     socket.on('user move', function(user){
       console.log("User moved *", user.userId);
-      for (var i = 0, len = users.length; i < len; i++) {
-        if(users[i].userId === user.userId){
-          user[i] = user;
-          break;
-        }
-      }
-
-      io.emit('users', users);
+      io.emit('user moved', user);
+    });
+    socket.on('user update', function(user){
+      console.log("User Updated *", user.userId);
+      // io.emit('user moved', user);
     });
 
     socket.on('disconnect', function(){
