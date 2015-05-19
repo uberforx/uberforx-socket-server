@@ -16,24 +16,37 @@ var users = [];
 /* TO-DO Sepeare functions from socket events */
 
 io.on('connection', function(socket){
-    console.log('User connected');
 
 
-    socket.on('new user', function(user){
+    //A user is connected
+    socket.on('new:user', function(user){
+      console.log("user connected")
       socket.nick = user.userId;
       users.push(user);
-      console.log(user)
 
-      io.emit('users', user);
+      //Do something with user
+      io.emit('user', user);
+      io.emit('error', 'error');
+      console.log('emitted' + user.userId);
     });
 
-    socket.on('user move', function(user){
+    socket.on('user:move', function(user){
       console.log("User moved *", user.userId);
-      io.emit('user moved', user);
+      io.broadcast.emit('user:moved', user);
     });
-    socket.on('user update', function(user){
+    socket.on('user:update', function(user){
       console.log("User Updated *", user.userId);
-      // io.emit('user moved', user);
+      // io.broadcast.emit('user moved', user);
+      io.broadcast.emit("admin:driverlist", "Driver Updated")
+    });
+    //Admin is connected
+    socket.on('new:admin', function(data){
+      console.log('admin connected')
+
+      io.emit('error', 'error');
+      io.emit('admin:driverlist', users);
+      console.log(users);
+      console.log("emitted admin:driverlist")
     });
 
     socket.on('disconnect', function(){
@@ -51,6 +64,7 @@ io.on('connection', function(socket){
         }
       }
     });
+
 });
 
 http.listen(port, function(){

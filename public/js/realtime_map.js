@@ -39,7 +39,8 @@ function initTracker(){
       "lng" : lng
     };
 
-    socket.emit('new user', new_user);
+    socket.emit('new:user', new_user);
+    socket.emit('user:update', new_user);
 
     var watchID = navigator.geolocation.watchPosition(function(position) {
       var lat = position.coords.latitude
@@ -59,10 +60,9 @@ function initTracker(){
       user.path.push(p);
 
       socket.emit('user move', user);
+      socket.emit('user:update', user);
     });
   });
-
-  return false;
 }
 
 socket.on('users', function(user){
