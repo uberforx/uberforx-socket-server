@@ -37,7 +37,7 @@ io.on('connection', function(socket){
     socket.on('user:update', function(user){
       console.log("User Updated *", user.userId);
       // io.broadcast.emit('user moved', user);
-      io.broadcast.emit("admin:driverlist", "Driver Updated")
+      io.emit("admin:driverlist", users)
     });
     //Admin is connected
     socket.on('new:admin', function(data){
@@ -45,7 +45,7 @@ io.on('connection', function(socket){
 
       io.emit('error', 'error');
       io.emit('admin:driverlist', users);
-      console.log(users);
+      console.log(data); //Hello
       console.log("emitted admin:driverlist")
     });
 
